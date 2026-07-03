@@ -1,3 +1,4 @@
+from pathlib import Path
 # количество пользователей и товаров
 NUM_USERS = 5000
 NUM_PRODUCTS = 1000
@@ -59,6 +60,7 @@ CART_ITEM_MIN = 1
 CART_ITEM_MAX = 5
 
 # Название директории хранения сырых данных
+BASE_DIR = Path(__file__).resolve().parent.parent
 RAW_DATA_DIR = 'data/raw'
 
 # Названия файлов с сырыми данными

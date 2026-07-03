@@ -43,10 +43,12 @@ DEVICE_TYPES = ['desktop', 'mobile', 'tablet']
 # источники трафика
 UTM_SOURCES = ['organic', 'google_ads', 'facebook_ads', 'direct', 'referral']
 
+PAYMENT_METHODS = ['credit_card', 'boleto', 'pix', 'debit_card']
+
 # вероятности
 CART_CREATION_PROBABILITY = 0.3 # создание корзины в сессии
 ORDER_PROBABILITY = 0.4         # оформление заказа
-PAYMENT_PROBABILITY = 0.9       # оплата заказа
+PAYMENT_PROBABILITY = 0.8       # оплата заказа
 
 # мин макс цены товаров
 PRICE_MEAN = 200

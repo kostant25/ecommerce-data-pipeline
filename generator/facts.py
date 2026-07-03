@@ -111,3 +111,75 @@ def generate_cart_items(carts_df, products_df) -> pd.DataFrame:
     assert not cart_items_df.duplicated(subset=['cart_id', 'cart_item_id']).any()
 
     return cart_items_df
+
+def generate_orders(carts_df) -> pd.DataFrame:
+    np.random.seed(67)
+
+    orders_data = []
+
+    for _, cart in tqdm(carts_df.iterrows(), total=len(carts_df), desc='Generating orders'):
+
+        if np.random.random() < ORDER_PROBABILITY:
+
+            if np.random.random() < PAYMENT_PROBABILITY:
+                status = 'delivered'
+            else:
+                status = 'cancelled'
+
+            duration = (cart['end_time'] - cart['created_time']).total_seconds()
+            max_offset = max(0, int(duration))
+            offset = np.random.randint(0, max_offset + 1)  # 0 до max_offset включительно
+            order_time = cart['created_time'] + pd.Timedelta(seconds=int(offset))
+
+            orders_data.append({
+                'order_id': uuid.uuid4().hex,
+                'cart_id': cart['cart_id'],
+                'user_id': cart['user_id'],
+                'order_time': order_time,
+                'status': status
+            })
+
+    orders_df = pd.DataFrame(orders_data)
+    merged = orders_df.merge(carts_df[['cart_id', 'created_time', 'end_time']], on='cart_id')
+
+    assert orders_df['order_id'].is_unique, 'Order is not unique'
+    assert orders_df['cart_id'].is_unique, 'Card is not unique'
+    assert merged['order_time'].between(merged['created_time'],
+                                          merged['end_time']).all(), 'Order time outside session'
+
+    return orders_df
+
+def generate_payments(orders_df, cart_items_df, products_df) -> pd.DataFrame:
+    np.random.seed(67)
+
+    cart_prices = cart_items_df.merge(products_df[['product_id', 'base_price']], on='product_id')
+    cart_prices['amount'] = cart_prices['quantity'] * cart_prices['base_price']
+
+    carts = cart_prices.groupby('cart_id')['amount'].sum().reset_index()
+
+    payment_orders = orders_df[orders_df['status'] == 'delivered'].merge(carts[['cart_id', 'amount']], on='cart_id')
+
+    payments_data = []
+
+    for _, payment in tqdm(payment_orders.iterrows(), total=len(payment_orders), desc='Generating payments'):
+
+        method = np.random.choice(PAYMENT_METHODS)
+
+        offset = np.random.randint(1, 3600)
+        payment_time = payment['order_time'] + pd.Timedelta(seconds=int(offset))
+
+        payments_data.append({
+            'payment_id': uuid.uuid4().hex,
+            'order_id': payment['order_id'],
+            'amount': payment['amount'],
+            'payment_time': payment_time,
+            'method': method
+        })
+
+    payments_df = pd.DataFrame(payments_data)
+
+    assert payments_df['payment_id'].is_unique, 'Payment id not unique'
+    assert payments_df['order_id'].is_unique, 'Order id not unique'
+    assert (payments_df['amount'] > 0).all(), 'Amount greater than 0'
+
+    return payments_df

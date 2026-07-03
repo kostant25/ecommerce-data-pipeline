@@ -12,9 +12,29 @@ EVENT_START = '2023-01-01'
 EVENT_END = '2024-07-31'
 
 # списки категорий и подкатегорий
-CATEGORIES = ['Электроника', 'Одежда', 'Дом', 'Спорт', 'Красота']
+CATEGORIES = [
+    'Electronics',
+    'Clothing',
+    'Home & Garden',
+    'Sports & Outdoors',
+    'Beauty & Health',
+    'Automotive',
+    'Books & Hobbies',
+    'Food',
+    'Children\'s Goods',
+    'Office & Stationery'
+]
 SUBCATEGORIES = {
-    'Электроника': ['Смартфоны', 'Ноутбуки']
+    'Electronics': ['Smartphones', 'Laptops', 'Headphones', 'Tablets', 'Accessories'],
+    'Clothing': ['T-Shirts', 'Jeans', 'Jackets', 'Dresses', 'Shoes'],
+    'Home & Garden': ['Furniture', 'Lighting', 'Decor', 'Textiles', 'Garden Tools'],
+    'Sports & Outdoors': ['Exercise Equipment', 'Sportswear', 'Camping', 'Bicycles', 'Yoga & Fitness'],
+    'Beauty & Health': ['Skincare', 'Makeup', 'Fragrances', 'Vitamins', 'Hair Care'],
+    'Automotive': ['Car Accessories', 'Oils & Fluids', 'Tyres', 'Car Electronics', 'Tools'],
+    'Books & Hobbies': ['Books', 'Board Games', 'Musical Instruments', 'Crafts', 'Puzzles'],
+    'Food': ['Beverages', 'Snacks', 'Groceries', 'Sweets', 'Canned Food'],
+    'Children\'s Goods': ['Toys', 'Diapers', 'Kids\' Clothing', 'Feeding', 'Strollers'],
+    'Office & Stationery': ['Paper & Notebooks', 'Pens & Pencils', 'Office Electronics', 'Office Furniture', 'Organizers']
 }
 
 # виды девайсов

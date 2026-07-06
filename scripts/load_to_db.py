@@ -1,9 +1,16 @@
+import sys
+from pathlib import Path
+
+from psycopg2 import extras
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from sqlalchemy import create_engine, text
 import pandas as pd
 
 from generator.config import BASE_DIR, RAW_DATA_DIR
 
-db_engine = create_engine('postgresql://postgres_user:postgres_password@localhost:5430/postgres_db')
+db_engine = create_engine('postgresql://postgres_user:postgres_password@postgres:5432/postgres_db')
 file_names = ['dim_users', 'dim_products', 'fct_sessions', 'fct_carts', 'fct_cart_items', 'fct_orders', 'fct_payments']
 DATE_COLS = {
     'dim_users': ['registration_date'],
@@ -25,16 +32,24 @@ def load_csv_to_db(file_name, engine, loading=True):
     if loading:
         print(f'Начинаем загрузку {file_name} в БД...')
 
-        table.to_sql(
-            name=file_name,
-            con=engine,
-            if_exists='append',
-            index=False
-        )
+        conn = engine.raw_connection()
+        try:
+            with conn.cursor() as cur:
+                # Формируем список кортежей
+                tuples = [tuple(x) for x in table.to_numpy()]
+                cols = ','.join(list(table.columns))
+                query = f"INSERT INTO {file_name} ({cols}) VALUES %s"
+                extras.execute_values(cur, query, tuples)
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
 
         print(f'Загрузка {file_name} завершена')
 
-        with engine.connect() as conn:
+        with engine.begin() as conn:
             count = conn.execute(text(f'SELECT COUNT(*) FROM {file_name}')).scalar()
 
             print(f'Загружено {count} из {len(table)} записей')
@@ -44,10 +59,9 @@ def load_csv_to_db(file_name, engine, loading=True):
 
 
 def clear_all_tables(engine):
-    with engine.connect() as conn:
+    with engine.begin() as conn:
         for table in reversed(file_names):
             conn.execute(text(f"TRUNCATE TABLE {table} CASCADE"))
-        conn.commit()
     print("All tables truncated.")
 
 

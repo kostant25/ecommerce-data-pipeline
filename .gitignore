@@ -16,3 +16,4 @@ wheels/
 data/raw/*
 data/processed/*
 /docker/pgdata/
+/airflow/logs/

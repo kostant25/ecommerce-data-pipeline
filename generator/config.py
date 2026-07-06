@@ -64,10 +64,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 RAW_DATA_DIR = 'data/raw'
 
 # Названия файлов с сырыми данными
-USERS_FILE = 'users.csv'
-PRODUCTS_FILE = 'products.csv'
-SESSIONS_FILE = 'sessions.csv'
-CARTS_FILE = 'carts.csv'
-CART_ITEMS_FILE = 'cart_items.csv'
-ORDERS_FILE = 'orders.csv'
-PAYMENTS_FILE = 'payments.csv'
+USERS_FILE = 'dim_users.csv'
+PRODUCTS_FILE = 'dim_products.csv'
+SESSIONS_FILE = 'fct_sessions.csv'
+CARTS_FILE = 'fct_carts.csv'
+CART_ITEMS_FILE = 'fct_cart_items.csv'
+ORDERS_FILE = 'fct_orders.csv'
+PAYMENTS_FILE = 'fct_payments.csv'

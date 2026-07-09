@@ -17,3 +17,5 @@ data/raw/*
 data/processed/*
 /docker/pgdata/
 /airflow/logs/
+/dbt/logs/
+/dbt/ecommerce_analytics/logs/

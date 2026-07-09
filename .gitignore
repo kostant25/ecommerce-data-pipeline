@@ -19,3 +19,4 @@ data/processed/*
 /airflow/logs/
 /dbt/logs/
 /dbt/ecommerce_analytics/logs/
+/logs/

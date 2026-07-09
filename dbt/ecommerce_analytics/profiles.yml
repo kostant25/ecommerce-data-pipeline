@@ -1,0 +1,12 @@
+ecommerce_analytics:
+  outputs:
+    dev:
+      dbname: postgres_db
+      host: localhost
+      pass: postgres_password
+      port: 5430
+      schema: public
+      threads: 4
+      type: postgres
+      user: postgres_user
+  target: dev

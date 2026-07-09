@@ -1,0 +1,94 @@
+sources:
+  - name: raw
+    description: "Сырые данные интернет-магазина, загруженные из CSV в PostgreSQL"
+    schema: public
+    tables:
+      - name: dim_users
+        description: "Пользователи"
+        columns:
+          - name: user_id
+            description: "Уникальный идентификатор пользователя"
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "Email пользователя"
+            tests:
+              - unique
+              - not_null
+
+      - name: dim_products
+        description: "Товары"
+        columns:
+          - name: product_id
+            description: "Уникальный идентификатор товара"
+            tests:
+              - unique
+              - not_null
+          - name: base_price
+            description: "Базовая цена товара"
+            tests:
+              - not_null
+
+      - name: fct_sessions
+        description: "Сессии пользователей на сайте"
+        columns:
+          - name: session_id
+            description: "Уникальный идентификатор сессии"
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+            description: "Пользователь, совершивший сессию"
+            tests:
+              - not_null
+
+      - name: fct_carts
+        description: "Корзины пользователей"
+        columns:
+          - name: cart_id
+            description: "Уникальный идентификатор корзины"
+            tests:
+              - unique
+              - not_null
+
+      - name: fct_cart_items
+        description: "Состав корзин"
+        columns:
+          - name: cart_id
+            description: "Идентификатор корзины"
+          - name: cart_item_id
+            description: "Номер позиции в корзине"
+          - name: product_id
+            description: "Товар"
+          - name: quantity
+            description: "Количество"
+            tests:
+              - not_null
+
+      - name: fct_orders
+        description: "Заказы"
+        columns:
+          - name: order_id
+            description: "Уникальный идентификатор заказа"
+            tests:
+              - unique
+              - not_null
+          - name: status
+            description: "Статус заказа"
+            tests:
+              - accepted_values:
+                  values: ['delivered', 'cancelled']
+
+      - name: fct_payments
+        description: "Платежи"
+        columns:
+          - name: payment_id
+            description: "Уникальный идентификатор платежа"
+            tests:
+              - unique
+              - not_null
+          - name: amount
+            description: "Сумма платежа"
+            tests:
+              - not_null

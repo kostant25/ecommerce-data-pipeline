@@ -1,0 +1,72 @@
+version: 2
+models:
+  - name: stg_users
+    description: "Staging-модель для пользователей"
+    columns:
+      - name: user_id
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: "Staging-модель для товаров"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: base_price
+        tests:
+          - not_null
+
+  - name: stg_sessions
+    description: "Staging-модель для сессий"
+    columns:
+      - name: session_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_carts
+    description: "Staging-модель для корзин"
+    columns:
+      - name: cart_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_cart_items
+    description: "Staging-модель для состава корзин"
+    columns:
+      - name: cart_id
+      - name: cart_item_id
+      - name: quantity
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Staging-модель для заказов"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['delivered', 'cancelled']
+
+  - name: stg_payments
+    description: "Staging-модель для платежей"
+    columns:
+      - name: payment_id
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        tests:
+          - not_null

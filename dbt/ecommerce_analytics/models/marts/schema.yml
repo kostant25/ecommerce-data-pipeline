@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: fct_daily_revenue
+    description: "Витрина дневной выручки с накопительным итогом"
+    columns:
+      - name: order_date
+        description: "Дата заказа"
+        tests:
+          - not_null
+      - name: daily_revenue
+        description: "Выручка за день"
+        tests:
+          - not_null
+      - name: cumulative_revenue
+        description: "Накопительная выручка нарастающим итогом"
+
+  - name: fct_monthly_revenue_growth
+    description: "Витрина месячной выручки и процента прироста"
+    columns:
+      - name: order_month
+        description: "Месяц"
+        tests:
+          - not_null
+      - name: monthly_revenue
+        description: "Выручка за месяц"
+        tests:
+          - not_null
+      - name: previous_revenue
+        description: "Выручка за предыдущий месяц"
+      - name: growth_percent
+        description: "Процент прироста к предыдущему месяцу"
+
+  - name: fct_top_products
+    description: "Топ-5 товаров по выручке в каждой категории"
+    columns:
+      - name: category
+        description: "Категория товара"
+        tests:
+          - not_null
+      - name: product_name
+        description: "Название товара"
+        tests:
+          - not_null
+      - name: total_revenue
+        description: "Общая выручка товара"
+        tests:
+          - not_null
+      - name: rank
+        description: "Место товара в категории"
+
+  - name: fct_cohort_retention
+    description: "Когортный анализ удержания клиентов"
+    columns:
+      - name: cohort_month
+        description: "Месяц первой покупки (когорта)"
+        tests:
+          - not_null
+      - name: period_index
+        description: "Номер месяца относительно первой покупки"
+        tests:
+          - not_null
+      - name: active_customers
+        description: "Количество активных клиентов в данном периоде"
+      - name: cohort_size
+        description: "Общий размер когорты"
+      - name: retention_rate
+        description: "Доля удержания, %"
+
+  - name: fct_conversion_funnel
+    description: "Витрина воронки конверсии по неделям"
+    columns:
+      - name: week
+        description: "Начало недели"
+        tests:
+          - not_null
+      - name: total_sessions
+        description: "Общее количество сессий"
+      - name: total_carts
+        description: "Количество созданных корзин"
+      - name: total_orders
+        description: "Количество оформленных заказов"
+      - name: total_paid
+        description: "Количество оплаченных заказов"
+      - name: cart_conversion_rate
+        description: "Конверсия из сессии в корзину, %"
+      - name: order_conversion_rate
+        description: "Конверсия из корзины в заказ, %"
+      - name: paid_conversion_rate
+        description: "Конверсия из заказа в оплату, %"

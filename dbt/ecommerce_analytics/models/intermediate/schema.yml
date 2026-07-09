@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: "Обогащённая информация о заказах с клиентом, корзиной и суммой"
+    columns:
+      - name: order_id
+        description: "Уникальный идентификатор заказа"
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        description: "Полная стоимость заказа"
+        tests:
+          - not_null
+      - name: status
+        description: "Статус заказа"
+        tests:
+          - accepted_values:
+              values: ['delivered', 'cancelled']
+      - name: cart_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: order_time
+        description: "Дата и время оформления заказа"
+        tests:
+          - not_null
+
+  - name: int_sessions_enriched
+    description: "Обогащённая информация о сессиях с флагами конверсии в корзину и заказ"
+    columns:
+      - name: session_id
+        description: "Уникальный идентификатор сессии"
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: start_time
+        description: "Начало сессии"
+        tests:
+          - not_null
+      - name: has_cart
+        description: "Флаг: была ли создана корзина в рамках сессии"
+      - name: has_order
+        description: "Флаг: был ли оформлен заказ в рамках сессии"
+      - name: order_status
+        description: "Статус заказа (если есть)"

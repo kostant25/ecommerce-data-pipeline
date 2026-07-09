@@ -3,9 +3,9 @@ ecommerce_analytics:
     dev:
       dbname: postgres_db
       host: localhost
-      pass: postgres_password
+      password: postgres_password
       port: 5430
-      schema: public
+      schema: dbt_analytics
       threads: 4
       type: postgres
       user: postgres_user

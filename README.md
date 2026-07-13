@@ -67,7 +67,14 @@ python generator/generate.py
 ```
 Скрипт создаст CSV‑файлы в папке ```data/raw/``` (файлы исключены из Git).
 
-### 4. Запустите всю инфраструктуру через Docker Compose
+### 4. Соберите образ Airflow (только при первом запуске или после изменений кода)
+```bash
+cd docker
+docker build -t my-airflow:latest ./airflow
+```
+Эта команда создает образ ```my-airflow:latest```, содержащий Python-зависимости, dbt, код генератора, скриптов и dbt-моделей.
+
+### 5. Запустите всю инфраструктуру через Docker Compose
 Убедитесь, что Docker запущен, затем выполните из папки docker/:
 ```bash
 cd docker
@@ -78,7 +85,7 @@ docker-compose up -d
 - Airflow (веб-интерфейс на http://localhost:8080, логин/пароль admin/admin)
 - Metabase (веб-интерфейс на http://localhost:3000)
 
-### 5. Создайте таблицы в PostgreSQL
+### 6. Создайте таблицы в PostgreSQL
 Выполните DDL-скрипт из корня проекта:
 ```bash
 docker exec -i ecommerce_container psql -U postgres_user -d postgres_db < sql/create_tables.sql
@@ -86,7 +93,7 @@ docker exec -i ecommerce_container psql -U postgres_user -d postgres_db < sql/cr
 База данных будет доступна на порту 5430 (пользователь: ```postgres_user```, пароль: ```postgres_password```, база: ```postgres_db```).
 Базы данных `airflow_db`, `metabaseappdb` и пользователь `metabase` создаются автоматически при первом запуске PostgreSQL благодаря скрипту `docker/initdb/init.sql`.
 
-### 6. Запустите пайплайн в Airflow
+### 7. Запустите пайплайн в Airflow
 1. Откройте http://localhost:8080, войдите (admin/admin).
 2. Включите DAG ecommerce_pipeline.
 3. Запустите его вручную (Trigger DAG) или дождитесь выполнения по расписанию.
@@ -95,12 +102,12 @@ docker exec -i ecommerce_container psql -U postgres_user -d postgres_db < sql/cr
    - load_to_db – загрузка в PostgreSQL
    - dbt_run – построение витрин dbt
 
-### 7. Проверьте качество данных (опционально, локально)
+### 8. Проверьте качество данных (опционально, локально)
 ```bash
 python scripts/validate_db.py
 ```
 
-### 8. Исследуйте витрины в Metabase
+### 9. Исследуйте витрины в Metabase
 1. Откройте http://localhost:3000.
 2. Пройдите первоначальную настройку (создайте аккаунт администратора).
 3. На шаге "Add your data" выберите **PostgreSQL** и заполните поля:

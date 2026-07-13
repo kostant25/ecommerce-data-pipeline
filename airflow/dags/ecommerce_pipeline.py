@@ -31,4 +31,12 @@ with DAG(
         bash_command='python /opt/airflow/project/scripts/load_to_db.py',
     )
 
-    generate_task >> load_task
+    dbt_task = BashOperator(
+        task_id='dbt_run',
+        bash_command=(
+            'cd /opt/airflow/project/dbt/ecommerce_analytics && '
+            'dbt run --target docker --profiles-dir .'
+        ),
+    )
+
+    generate_task >> load_task >> dbt_task

@@ -1,12 +1,21 @@
 ecommerce_analytics:
   outputs:
-    dev:
-      dbname: postgres_db
+    dev: # твоя локальная цель для работы с хоста (localhost:5430) – оставь как есть
+      type: postgres
       host: localhost
-      password: postgres_password
       port: 5430
+      user: postgres_user
+      password: postgres_password
+      dbname: postgres_db
       schema: dbt_analytics
       threads: 4
+    docker: # цель для запуска внутри контейнера Airflow
       type: postgres
+      host: postgres
+      port: 5432
       user: postgres_user
+      password: postgres_password
+      dbname: postgres_db
+      schema: dbt_analytics
+      threads: 4
   target: dev
